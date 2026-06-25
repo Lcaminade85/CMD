@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPD Points Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏥 CPD Points Tracker Dashboard</h1>
+      <p>Real-time Continuing Professional Development Points Management</p>
+      <div class="status-indicator">
+        <span id="connection-status" class="status-dot online"></span>
+        <span id="connection-text">Connected</span>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" onclick="showTab('dashboard')">📊 Dashboard</button>
+      <button class="tab-btn" onclick="showTab('add-staff')">👤 Add Staff</button>
+      <button class="tab-btn" onclick="showTab('add-activity')">📝 Log Activity</button>
+      <button class="tab-btn" onclick="showTab('staff-details')">📋 Staff Details</button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <section id="dashboard" class="tab-content active">
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <h3>Total Staff</h3>
+          <p id="total-staff" class="stat-number">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total CPD Points</h3>
+          <p id="total-points" class="stat-number">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Activities</h3>
+          <p id="total-activities" class="stat-number">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Avg Points/Staff</h3>
+          <p id="avg-points" class="stat-number">0</p>
+        </div>
+      </div>
+
+      <div class="leaderboard">
+        <h2>🏆 CPD Points Leaderboard</h2>
+        <table id="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Profession</th>
+              <th>Total Points</th>
+              <th>Activities</th>
+              <th>Last Activity</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body">
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Add Staff Tab -->
+    <section id="add-staff" class="tab-content">
+      <div class="form-card">
+        <h2>Add New Staff Member</h2>
+        <form id="add-staff-form">
+          <div class="form-group">
+            <label for="staff-name">Full Name *</label>
+            <input type="text" id="staff-name" required>
+          </div>
+          <div class="form-group">
+            <label for="staff-email">Email *</label>
+            <input type="email" id="staff-email" required>
+          </div>
+          <div class="form-group">
+            <label for="staff-profession">Profession *</label>
+            <select id="staff-profession" required>
+              <option value="">Select a profession</option>
+              <option value="Doctor">Doctor</option>
+              <option value="Nurse">Nurse</option>
+              <option value="Pharmacist">Pharmacist</option>
+              <option value="Dentist">Dentist</option>
+              <option value="Physiotherapist">Physiotherapist</option>
+              <option value="Healthcare Assistant">Healthcare Assistant</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Staff Member</button>
+          <p id="add-staff-message"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Add Activity Tab -->
+    <section id="add-activity" class="tab-content">
+      <div class="form-card">
+        <h2>Log CPD Activity</h2>
+        <form id="add-activity-form">
+          <div class="form-group">
+            <label for="activity-staff">Staff Member *</label>
+            <select id="activity-staff" required>
+              <option value="">Select staff member</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="activity-name">Activity Name *</label>
+            <input type="text" id="activity-name" placeholder="e.g., Medical Conference" required>
+          </div>
+          <div class="form-group">
+            <label for="activity-points">CPD Points *</label>
+            <input type="number" id="activity-points" step="0.5" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="activity-category">Category *</label>
+            <select id="activity-category" required>
+              <option value="">Select category</option>
+              <option value="Conference">Conference</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Course">Course</option>
+              <option value="Online Learning">Online Learning</option>
+              <option value="Professional Membership">Professional Membership</option>
+              <option value="Presentation">Presentation</option>
+              <option value="Research">Research</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="activity-date">Date Completed *</label>
+            <input type="date" id="activity-date" required>
+          </div>
+          <div class="form-group">
+            <label for="activity-description">Description</label>
+            <textarea id="activity-description" placeholder="Additional details (optional)" rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Log Activity</button>
+          <p id="add-activity-message"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Staff Details Tab -->
+    <section id="staff-details" class="tab-content">
+      <div class="staff-list">
+        <h2>Staff Members & Their CPD Points</h2>
+        <div id="staff-cards-container"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
